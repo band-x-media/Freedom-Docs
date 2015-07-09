@@ -39,19 +39,19 @@ You can issue `GET` and `POST` requests to the root endpoint (depending on the c
 
 Only calls requested over HTTPS will be served. All calls should be made this way and every response will be served back over HTTPS.
 
-	$ curl -i https://api.freedo.mx
-	
-	HTTP/1.1 200 OK
-	Server: nginx
-	Date: <?php echo date('D, d M Y H:i:s'); ?> GMT
-	Content-Type: application/json
-	Transfer-Encoding: chunked
-	Connection: keep-alive
-	Vary: Accept-Encoding
-	
-	{...}
+<pre><code class="language-http">$ curl -i https://api.freedo.mx
 
+HTTP/1.1 200 OK
+Server: nginx
+Date: <?php echo date('D, d M Y H:i:s'); ?> GMT
+Content-Type: application/json
+Transfer-Encoding: chunked
+Connection: keep-alive
+Vary: Accept-Encoding
 
+{...}
+
+</code></pre>
 
 ***
 
@@ -59,15 +59,15 @@ Only calls requested over HTTPS will be served. All calls should be made this wa
 
 Calls are constructed in a fixed format. Each call uses the base URL, `https://api.freedo.mx/` and then a `module` and `method`
 
-	https://api.freedo.mx/module/method
+<pre><code class="language-http">https://api.freedo.mx/module/method</code></pre>
 
 Any parameters are passed in the query string. At *minimum*, this will include the application key (also referred to as the API key):
 
-	https://api.freedo.mx/module/method?appKey=xxxxxxxxxxxxxx
+<pre><code class="language-http">https://api.freedo.mx/module/method?appKey=xxxxxxxxxxxxxx</code></pre>
 
 If the method you are calling receives parameters, add them to the query string
 
-	https://api.freedo.mx/module/method?appKey=xxxxxxxxxxxxxx&param=value
+<pre><code class="language-http">https://api.freedo.mx/module/method?appKey=xxxxxxxxxxxxxx&amp;param=value</code></pre>
 
 ***
 
@@ -79,11 +79,11 @@ In order to authenticate a user, they must first have validated their account an
 
 An adjustment is needed to the base URL if you are authenticating a user:
 
-	https://api.freedo.mx
+<pre><code class="language-http">https://api.freedo.mx</code></pre>
 
 *becomes:*
 
-	https://user@email.com:password@api.freedo.mx
+<pre><code class="language-http">https://user@email.com:password@api.freedo.mx</code></pre>
 
 This is a stateless API and therefore requires authentication for each call made that requires it.
 
@@ -93,15 +93,15 @@ This is a stateless API and therefore requires authentication for each call made
 
 All responses will be formatted in JSON.
 
-	$ curl https://api.freedo.mx
-	
-	{
-		"status": 400,
-		"message": "Application authentication failed",
-		"data": null,
-		"executionTime": 0
-	}
+<pre><code class="language-javascript">$ curl https://api.freedo.mx
 
+{
+	"status": 400,
+	"message": "Application authentication failed",
+	"data": null,
+	"executionTime": 0
+}
+</code></pre>
 Each response has four root nodes:
 
 | Node            | Type       | Description                                                              |
@@ -144,25 +144,25 @@ If and when we implement these in the future, they will take the following forma
 
 #### IP Address Limit:
 
-	$ curl https://api.freedo.mx[...]
-	
-	{
-		"status": 503,
-		"message": "API rate limit exceeded for xxx.xxx.xxx.xxx",
-		"data": null,
-		"executionTime": 0
-	}
+<pre><code class="language-javascript">$ curl https://api.freedo.mx[...]
+
+{
+	"status": 503,
+	"message": "API rate limit exceeded for xxx.xxx.xxx.xxx",
+	"data": null,
+	"executionTime": 0
+}</code></pre>
 
 #### Application Limit:
 
-	$ curl https://api.freedo.mx[...]
-	
-	{
-		"status": 504,
-		"message": "API rate limit exceeded for application xxxxxx",
-		"data": null,
-		"executionTime": 0
-	}
+<pre><code class="language-javascript">$ curl https://api.freedo.mx[...]
+
+{
+	"status": 504,
+	"message": "API rate limit exceeded for application xxxxxx",
+	"data": null,
+	"executionTime": 0
+}</code></pre>
 
 ***
 

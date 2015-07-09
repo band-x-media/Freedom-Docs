@@ -1,8 +1,3 @@
 ---
-title: Developers
-d: 456
+title: Modules
 ---
-
-<p>for developers</p>
-
-<?php echo UI_Icon::create("material", "action-search"); ?>
