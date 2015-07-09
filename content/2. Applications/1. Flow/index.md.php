@@ -39,7 +39,7 @@ Although it is technically possible, **an App shouldn't output directly to the b
 
 ### Rendering {#rendering}
 
-1. When the AppController is setup and <code class="language-php">render()</code> is called, the AppController hands over to the <code class="language-php">prepareOutput()</code> on the App parent class, which check whether it can be shown to the user by inspecting the App's [config file](/applications/config).
+1. When the AppController is setup and <code class="language-php">render()</code> is called, the AppController hands over to the <code class="language-php">prepareOutput()</code> on the `App` super class, which check whether it can be shown to the user by inspecting the App's [config file](/applications/config).
 
 2. If it can display, <code class="language-php">getCurrentRequestOutput()</code> is called on the App itself and the App is then handed the responsibility to do the work generating the page content against the [<code class="language-php">UI_HTMLPage()</code>](/modules/reference/ui/html-page) object.
 
@@ -71,6 +71,29 @@ The correct way to handle this event is to add an event listener in [App.php](/a
 		parent::__construct();
 
 		EventTower::register("app.render.getAlternativeContent", ["MyApp", "getAlternativeContent"], 1, true);
+
+	}
+
+</code></pre>
+
+
+You can then update the <code class="language-php">UI_HTMLPage</code> and return to close. The edited <code class="language-php">UI_HTMLPage</code> will now be used as the output:
+
+<pre><code class="language-php">	public static function getAlternativeContent($event, $params) {
+	
+		$app = $params['app'];
+		$reason = $params['reason'];
+
+		switch($reason['status']) {
+
+			case 401:
+				$app->_UI_HTMLPage->head["title"] = "Login";
+				$app->_UI_HTMLPage->body["content"] = new View("users", "registration/login");
+				$app->_UI_HTMLPage->defaultPage();
+				return $app;
+			break;
+
+		}
 
 	}
 
