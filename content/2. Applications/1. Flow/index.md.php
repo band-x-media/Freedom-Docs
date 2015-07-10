@@ -59,6 +59,8 @@ Although it is technically possible, **an App shouldn't output directly to the b
 	| ------ | ------------------------------------------------ |
 	| `401`  | App requires login but the user is not logged in |
 	| `403`  | App requires permissions this user does not have |
+	| `404`  | Content not Found                                |
+	| `500`  | Application Error                                |
 
 Of course, if an Application wants a user to login, reset a password etc, it will want it's own branded display. Therefore it needs to handle the event correctly and return as soon as possible, at the top of the priority list for the handler. If an app doesn't implement it's own login system, we use the one provided by the framework.
 
