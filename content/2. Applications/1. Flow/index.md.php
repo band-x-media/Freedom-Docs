@@ -10,6 +10,8 @@ tagline: Before you start writing applications it's important to understand how 
 - [Instantiation](#instantiation)
 - [AppController](#appController)
 - [Rendering](#rendering)
+- [Routing](#routing)
+- [Alternative Content](#alternativeContent)
 
 </div>
 
@@ -18,20 +20,24 @@ tagline: Before you start writing applications it's important to understand how 
 The very first point that an App will be initialised is in the handling [interface](/system/interfaces), as the parameter for an AppController:
 
 <pre><code class="language-php">//	initialise the application
-$appName = "MyApp";
-$controller = new AppController(new $appName);</code></pre>
+$appName = "\Freedom\App\MyApplication";
+$controller = new Freedom\Framework\System\Base\Controller\AppController(new $appName);</code></pre>
 
 The controller will then be asked to <code class="language-php">render()</code> the application:
 
 <pre><code class="language-php">$controller->render();</code></pre>
 
-If the <code class="language-php">render()</code> returns a value (i.e. it doesn't output anything to the browser) then the rest of the interface script will run.
+If the <code class="language-php">render()</code> returns a value (i.e. it doesn't output anything to the browser) then the rest of the [interface](/system/interfaces) script will run.
 
 ***
 
 ### AppController {#appController}
 
 The App Controller sets a [<code class="language-php">UI_HTMLPage()</code>](/modules/reference/ui/html-page) object onto the App for it to manipulate.
+
+<div class="alert alert-info">
+There is a utility method to get the <code class="language-php">UI_HTMLPage</code> inside the app. Simply call <code class="language-php">$this->page()</code> from your <code class="language-php">App</code> to return the object.
+</div>
 
 Although it is technically possible, **an App shouldn't output directly to the browser unless strictly necessary**. The [<code class="language-php">AppController()</code>](/system/controllers/app-controller) inherits from the [<code class="language-php">BaseController()</code>](/system/controllers/base-controller) which handles the preparation of the output (such as content filtering) and not returning the App to the controller will bypass this.
 
@@ -43,7 +49,7 @@ Although it is technically possible, **an App shouldn't output directly to the b
 
 2. If it can display, <code class="language-php">getCurrentRequestOutput()</code> is called on the App itself and the App is then handed the responsibility to do the work generating the page content against the [<code class="language-php">UI_HTMLPage()</code>](/modules/reference/ui/html-page) object.
 
-3. If the page requested can't be displayed (for example we require login but a user is not logged in), we fire a `app.render.getAlternativeContent` [event](/system/events) and when a responder returns a result, we collect the content and pass it back to the AppController to display. When the event is fired, we pass the following parameters so that a responder can choose whether to deal with the request or not:
+3. If the page requested can't be displayed (for example we require login but a user is not logged in, or an exception occured), we fire a `app.render.getAlternativeContent` [event](/system/events) and when a responder returns a result, we collect the content and pass it back to the AppController to display. When the event is fired, we pass the following parameters so that a responder can choose whether to deal with the request or not:
 
 	<pre><code class="language-php">EventTower::fire("app.render.getAlternativeContent", [
 		"app" => &$this,
@@ -53,31 +59,43 @@ Although it is technically possible, **an App shouldn't output directly to the b
 		]
 ]);</code></pre>
 
-	Possible reasons an app may not be able to render a page are:
+***
 
-	| Status | Message                                          |
-	| ------ | ------------------------------------------------ |
-	| `401`  | App requires login but the user is not logged in |
-	| `403`  | App requires permissions this user does not have |
-	| `404`  | Content not Found                                |
-	| `500`  | Application Error                                |
+### Routing {#routing}
+
+***
+
+### Alternative Content {#alternativeContent}
+
+When a request can't be satisfied by the application, we need to get some content to show the user, depending on the reason the content can't be displayed.
+
+Possible reasons an app may not be able to render a page are listed below. Notice the similarity to [HTTP Status Codes](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html){target=_blank}. This is so that we can set the correct header via HTTP.
+
+| Status | Message                                          |
+| ------ | ------------------------------------------------ |
+| `401`  | App requires login but the user is not logged in |
+| `403`  | App requires permissions this user does not have |
+| `404`  | Content not Found                                |
+| `500`  | Application Error                                |
 
 Of course, if an Application wants a user to login, reset a password etc, it will want it's own branded display. Therefore it needs to handle the event correctly and return as soon as possible, at the top of the priority list for the handler. If an app doesn't implement it's own login system, we use the one provided by the framework.
 
 The correct way to handle this event is to add an event listener in [App.php](/applications/app-php) within the <code class="language-php">__construct</code> method, **after** <code class="language-php">parent::__construct()</code> has been called:
 
-<pre><code class="language-php">class MyApp extends App implements AppMethods {
+<pre><code class="language-php">namespace Freedom\App;
+use \Freedom\Framework\System\Base as AppBase;
+
+class MyApplication extends AppBase\App implements AppBase\AppMethods {
 
 	public function __construct() {
 
 		parent::__construct();
 
-		EventTower::register("app.render.getAlternativeContent", ["MyApp", "getAlternativeContent"], 1, true);
+		\EventTower::register("app.render.getAlternativeContent", ["MyApplication", "getAlternativeContent"], 1, true);
 
 	}
 
 </code></pre>
-
 
 You can then update the <code class="language-php">UI_HTMLPage</code> and return to close. The edited <code class="language-php">UI_HTMLPage</code> will now be used as the output:
 
@@ -100,4 +118,3 @@ You can then update the <code class="language-php">UI_HTMLPage</code> and return
 	}
 
 }</code></pre>
-
