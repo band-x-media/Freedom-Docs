@@ -9,7 +9,6 @@ tagline: Events allow you to set up listeners or fire events for listeners to ha
 
 - [Instantiation](#introduction)
 - [Adding Event Listeners](#adding)
-- [Removing an Event Listener](#removing)
 - [Firing Events](#firing)
 - [Prioritisation](#prioritisation)
 - [Stopping Events](#stoppingEvents)
@@ -89,3 +88,4 @@ This is very useful when passing parameters by reference that should *only be op
 | Event Name                         | Description | Returns
 | -----------------------------------|------------ | -------
 | `app.render.getAlternativeContent` | an applications wants to get a response to a non standard page, such as a 404 or when the user needs to be logged in, but aren't | Nothing; the passed param `$app->_UI_HTMLPage` should be updated to reflect the new content
+| `app.getContentView.sectionIndex`  | when an application can't find a route for the content but the page exists with children | nothing; expected to update the <code class="language-php">$params['app']->_content</code> variable with the [Section Index](/modules/reference/ui/section-index) or other content
