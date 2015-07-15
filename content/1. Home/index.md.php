@@ -28,28 +28,28 @@ You can write an app in minutes that uses the architecture of the framework to c
 		[
 			"title" => "Theming",
 			"link" => "/themes",
-			"description" => "<p>&nbsp;</p>",
+			"description" => "<p>Learn about how to write themes and applying them to your website or application.</p>",
 			"icon" => "format_paint",
 			"colour" => "green"
 		],
 		[
 			"title" => "Writing Modules",
 			"link" => "/modules",
-			"description" => "<p>&nbsp;</p>",
+			"description" => "<p>Modules offer flexible, decoupled functionality to the Framework. Learn how to integrate them into your application.</p>",
 			"icon" => "widgets",
 			"colour" => "orange"
 		],
 		[
 			"title" => "Managing your System",
 			"link" => "/system",
-			"description" => "<p>&nbsp;</p>",
+			"description" => "<p>If you are responsible for maintaining an implementation of the Freedom Framework, start here to understand how the system works.</p>",
 			"icon" => "dns",
 			"colour" => "red"
 		],
 		[
 			"title" => "Managing Content",
 			"link" => "https://help.freedo.mx",
-			"description" => "<p>&nbsp;</p>",
+			"description" => "<p>If you are a site administrator, you may want to read these help documents to understand how to manage your sites content.</p>",
 			"icon" => "open_in_browser",
 			"colour" => "indigo"
 		]
@@ -59,9 +59,7 @@ You can write an app in minutes that uses the architecture of the framework to c
 
 <div class="col-md-4">
 
-
 	<div class="card paper">
-
 
 		<div class="tile tile-sm bg-<?php echo $item["colour"]; ?>">
 
